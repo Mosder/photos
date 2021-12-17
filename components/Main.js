@@ -1,9 +1,16 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import * as MediaLibrary from "expo-media-library";
 
 export default class Main extends React.Component {
     constructor(props) {
         super(props)
+    }
+    async componentDidMount() {
+        let { status } = await MediaLibrary.requestPermissionsAsync();
+        if (status !== 'granted') {
+            alert('brak uprawnień do czytania image-ów z galerii')
+        }
     }
     render() {
         return (

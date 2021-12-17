@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Main from "./components/Main"
 import Gallery from "./components/Gallery"
+import BigPhoto from "./components/BigPhoto"
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +14,18 @@ export default function App() {
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
-                <Stack.Screen name="Gallery" component={Gallery} options={{ headerTitle: "Zdjęcia z folderu DCIM" }} />
+                <Stack.Screen name="Gallery" component={Gallery} options={{
+                    headerTitle: "Zdjęcia z folderu DCIM",
+                    headerStyle: { backgroundColor: '#f8a' },
+                    headerTitleStyle: { color: '#eee' },
+                    headerTintColor: '#eee'
+                }} />
+                <Stack.Screen name="BigPhoto" component={BigPhoto} options={{
+                    headerTitle: "Wybrane zdjęcie",
+                    headerStyle: { backgroundColor: '#f8a' },
+                    headerTitleStyle: { color: '#eee' },
+                    headerTintColor: '#eee'
+                }} />
             </Stack.Navigator>
         </NavigationContainer>
     );
