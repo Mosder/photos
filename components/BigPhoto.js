@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, StyleSheet, TouchableOpacity, Text, Dimensions, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, Text, Dimensions, View, BackHandler } from 'react-native';
 import * as MediaLibrary from "expo-media-library";
 import * as Sharing from 'expo-sharing';
 
@@ -13,23 +13,17 @@ export default class BigPhoto extends React.Component {
             this.props.navigation.goBack();
     }
     async share(url) {
-        let check = Sharing.isAvailableAsync()
-        if (check) {
-            await Sharing.shareAsync(url);
-        }
-        else {
-            console.log('sus')
-        }
+        Sharing.shareAsync(url);
     }
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.imgCont}>
-                    <Image style={styles.img} source={{ uri: this.props.route.params.uri }} />
+                    <Image resizeMode={'cover'} style={styles.img} source={{ uri: this.props.route.params.uri }} />
                 </View>
                 <View style={styles.buttons}>
                     <TouchableOpacity style={styles.button}
-                        onPress={() => this.share(this.props.route.params.id)}>
+                        onPress={() => this.share(this.props.route.params.uri)}>
                         <Text style={styles.buttonText}>SHARE</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button}
@@ -56,7 +50,6 @@ const styles = StyleSheet.create({
     },
     img: {
         borderRadius: 10,
-        resizeMode: 'cover',
         width: "100%",
         height: "100%",
     },

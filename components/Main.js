@@ -16,11 +16,12 @@ export default class Main extends React.Component {
         return (
             <View style={styles.container}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate("Gallery")}>
-                    <Text style={styles.buttonText}>Photos App</Text>
+                    <Text style={styles.buttonText}>Camera App</Text>
                 </TouchableOpacity>
                 <Text style={styles.text}>show gallery pictures</Text>
                 <Text style={styles.text}>delete photo from device</Text>
                 <Text style={styles.text}>share photo</Text>
+                <Text style={styles.name}>by Maciej Borowiec</Text>
             </View>
         )
     }
@@ -41,5 +42,9 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 25,
         color: '#eee'
+    },
+    name: {
+        fontSize: 30,
+        color: '#ddd'
     }
 });
