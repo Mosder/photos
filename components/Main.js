@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import * as MediaLibrary from "expo-media-library";
+import * as SecureStore from 'expo-secure-store';
 
 export default class Main extends React.Component {
     constructor(props) {
@@ -11,6 +12,17 @@ export default class Main extends React.Component {
         if (status !== 'granted') {
             alert('brak uprawnień do czytania image-ów z galerii')
         }
+        this.getSets();
+    }
+    async saveDefaultSets() {
+        await SecureStore.setItemAsync("ip", "192.168.1.69");
+        await SecureStore.setItemAsync("port", "3000");
+    }
+    async getSets() {
+        let ip = await SecureStore.getItemAsync("ip");
+        let port = await SecureStore.getItemAsync("port");
+        if (ip == null || port == null)
+            this.saveDefaultSets()
     }
     render() {
         return (

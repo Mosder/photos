@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, ToastAndroid, Image, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
 import * as MediaLibrary from "expo-media-library";
 import { Camera } from "expo-camera";
 import CircleButton from './CircleButton'

@@ -2,12 +2,13 @@ import * as React from 'react';
 import { StyleSheet, View, FlatList, TouchableOpacity, Text, Dimensions, ToastAndroid, Alert } from 'react-native';
 import * as MediaLibrary from "expo-media-library";
 import FotoItem from "./FotoItem";
+import * as SecureStore from 'expo-secure-store';
 
 export default class Gallery extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { layout: 1, photos: [], selected: [] }
-        this.props.navigation.addListener("focus", () => this.getPhotos());
+        this.state = { layout: 1, photos: [], selected: [], ip: '', port: '' }
+        this.props.navigation.addListener("focus", () => { this.getPhotos(); this.getSets(); });
     }
     async getPhotos() {
         let photos = await MediaLibrary.getAssetsAsync({
@@ -17,6 +18,14 @@ export default class Gallery extends React.Component {
         });
         this.setState({ photos: photos.assets });
         console.log(photos.assets)
+    }
+    async getSets() {
+        let ip = await SecureStore.getItemAsync("ip");
+        let port = await SecureStore.getItemAsync("port");
+        this.setSets(ip, port);
+    }
+    setSets(ip, port) {
+        this.setState({ ip, port })
     }
     changeLayout() {
         this.setState({ layout: Math.abs(this.state.layout - 1) });
@@ -50,7 +59,7 @@ export default class Gallery extends React.Component {
                 name: id
             });
         }
-        let response = await fetch("http://192.168.1.102:3000/upload", {
+        let response = await fetch(`http://${this.state.ip}:${this.state.port}/upload`, {
             method: 'POST',
             body: data
         })

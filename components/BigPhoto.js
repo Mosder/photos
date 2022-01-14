@@ -2,10 +2,24 @@ import * as React from 'react';
 import { Image, StyleSheet, TouchableOpacity, Text, Dimensions, View, Alert } from 'react-native';
 import * as MediaLibrary from "expo-media-library";
 import * as Sharing from 'expo-sharing';
+import * as SecureStore from 'expo-secure-store';
+import * as ImagePicker from 'expo-image-picker';
+import Picker from '../assets/picker.png';
+import CircleButton from './CircleButton';
 
 export default class BigPhoto extends React.Component {
     constructor(props) {
         super(props)
+        this.state = { ip: '', port: '' }
+        this.props.navigation.addListener("focus", () => this.getSets());
+    }
+    async getSets() {
+        let ip = await SecureStore.getItemAsync("ip");
+        let port = await SecureStore.getItemAsync("port");
+        this.setSets(ip, port);
+    }
+    setSets(ip, port) {
+        this.setState({ ip, port })
     }
     async delete(id) {
         let result = await MediaLibrary.deleteAssetsAsync([id]);
@@ -16,22 +30,39 @@ export default class BigPhoto extends React.Component {
         Sharing.shareAsync(url);
     }
     async upload(uri, id) {
+        let name = id;
+        let msg = 'Photo uploaded';
+        if (id == undefined) {
+            name = Date.now();
+            msg = 'Photo picked and uploaded';
+        }
         const data = new FormData();
         data.append('photo', {
             uri,
             type: 'image/jpeg',
-            name: id
+            name: name
         });
-        let response = await fetch("http://192.168.1.102:3000/upload", {
+        let response = await fetch(`http://${this.state.ip}:${this.state.port}/upload`, {
             method: 'POST',
             body: data
         })
         if (response.ok) {
-            Alert.alert('Alert', 'Photo uploaded', [
+            Alert.alert('Alert', msg, [
                 {
                     text: 'OK'
                 }
             ]);
+        }
+    }
+    async picker() {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+        if (!result.cancelled) {
+            this.upload(result.uri)
         }
     }
     render() {
@@ -54,6 +85,7 @@ export default class BigPhoto extends React.Component {
                         <Text style={styles.buttonText}>UPLOAD</Text>
                     </TouchableOpacity>
                 </View>
+                <CircleButton size={100} img={Picker} press={() => this.picker()} />
             </View>
         )
     }
