@@ -20,26 +20,9 @@ export default class Gallery extends React.Component {
         this.setState({ hasCameraPermission: status == 'granted' });
     }
     async takePhoto() {
-        try {
-            let foto = await this.camera.takePictureAsync();
-            this.setLastPhoto(foto);
-            let asset = await MediaLibrary.createAssetAsync(foto.uri);
-            const album = await MediaLibrary.getAlbumAsync("Camera");
-            let addAss = await MediaLibrary.addAssetsToAlbumAsync(
-                [asset],
-                album,
-                false
-            );
-            if (addAss) {
-                ToastAndroid.showWithGravity(
-                    'Zrobiono zdjęcie',
-                    ToastAndroid.SHORT,
-                    ToastAndroid.CENTER
-                )
-            }
-        } catch (snapshotError) {
-            console.error(snapshotError);
-        }
+        let foto = await this.camera.takePictureAsync();
+        this.setLastPhoto(foto);
+        await MediaLibrary.createAssetAsync(foto.uri);
     }
     frontBack() {
         this.setState({

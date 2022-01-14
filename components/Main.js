@@ -16,7 +16,7 @@ export default class Main extends React.Component {
         return (
             <View style={styles.container}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate("Gallery")}>
-                    <Text style={styles.buttonText}>Camera App</Text>
+                    <Text style={styles.buttonText}>Upload App</Text>
                 </TouchableOpacity>
                 <Text style={styles.text}>show gallery pictures</Text>
                 <Text style={styles.text}>delete photo from device</Text>

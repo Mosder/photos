@@ -7,6 +7,7 @@ import Main from "./components/Main"
 import Gallery from "./components/Gallery"
 import BigPhoto from "./components/BigPhoto"
 import CameraScreen from "./components/CameraScreen"
+import Settings from "./components/Settings"
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,12 @@ export default function App() {
                 }} />
                 <Stack.Screen name="CameraScreen" component={CameraScreen} options={{
                     headerTitle: "Kamera",
+                    headerStyle: { backgroundColor: '#f8a' },
+                    headerTitleStyle: { color: '#eee' },
+                    headerTintColor: '#eee'
+                }} />
+                <Stack.Screen name="Settings" component={Settings} options={{
+                    headerTitle: "Settings",
                     headerStyle: { backgroundColor: '#f8a' },
                     headerTitleStyle: { color: '#eee' },
                     headerTintColor: '#eee'

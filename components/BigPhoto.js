@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, StyleSheet, TouchableOpacity, Text, Dimensions, View, BackHandler } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, Text, Dimensions, View, Alert } from 'react-native';
 import * as MediaLibrary from "expo-media-library";
 import * as Sharing from 'expo-sharing';
 
@@ -15,6 +15,25 @@ export default class BigPhoto extends React.Component {
     async share(url) {
         Sharing.shareAsync(url);
     }
+    async upload(uri, id) {
+        const data = new FormData();
+        data.append('photo', {
+            uri,
+            type: 'image/jpeg',
+            name: id
+        });
+        let response = await fetch("http://192.168.1.102:3000/upload", {
+            method: 'POST',
+            body: data
+        })
+        if (response.ok) {
+            Alert.alert('Alert', 'Photo uploaded', [
+                {
+                    text: 'OK'
+                }
+            ]);
+        }
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -29,6 +48,10 @@ export default class BigPhoto extends React.Component {
                     <TouchableOpacity style={styles.button}
                         onPress={() => this.delete(this.props.route.params.id)}>
                         <Text style={styles.buttonText}>DELETE</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button}
+                        onPress={() => this.upload(this.props.route.params.uri, this.props.route.params.id)}>
+                        <Text style={styles.buttonText}>UPLOAD</Text>
                     </TouchableOpacity>
                 </View>
             </View>
